@@ -23,7 +23,8 @@ path will include parent path, and data will be shaped
 like a tree.
 
 Recent Chrome will be first browser to test, and intention is 
-to support only modern browsers with native history and websockets.
+to support only modern browsers with native history and 
+websockets API.
 
 [jquery]: http://jquery.com
 [bootstrap]: http://getbootstrap.com/
