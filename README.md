@@ -11,8 +11,8 @@ rapid prototyping tool.
 
 UI should be responsive and work well on different devices. 
 For that I will to use [jquery][] and [bootstrap][] for that. 
-Unresolved at this timehow to display wide tables, I inteded use 
-[slickgrid][], yet I am not sure if I get it to work well on smaler 
+Unresolved at this time is how to display wide tables, I inteded use 
+[slickgrid][], yet I am not sure if I get it to work well on smaller 
 devices .
 
 On backend [tornado][] will be used and communication will be 
