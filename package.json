@@ -1,0 +1,20 @@
+{
+    "name": "slinck"
+  , "version": "0.0.1"
+  , "description": ""
+  , "keywords": ["file", "structural", "job"]
+  , "author": "Walnut Geek <wg@walnutgeek.org>"
+  , "main": "index"
+  , "engines": { "node": ">= 0.4.x " }
+  , "scripts": {
+    "test": "make test"
+  } , 
+  
+  "devDependencies": {
+    "mocha" : "*",
+    "coveralls" : "*",
+    "mocha-lcov-reporter": "*",
+    "blanket": "*"
+    
+  }
+}
