@@ -16,6 +16,7 @@ import fcntl
 from sets import Set
 import sys
 
+from d2ux.root import Store,ServerStatus
 from . import utils
 import shlex, subprocess
 
@@ -27,19 +28,6 @@ log = logging.getLogger(__name__)
 class State:
     def __init__(self, dao):
         self.dao = dao
-        self.clients = []
-        self.config = self.dao.apply_config()
-        self.tasks = None
-        self.taskdict = None
-        meta = event.get_meta()
-        time_letty_map = dpt.Letty.time.value['vars']
-        meta['EventTypes'] = { et.event_type_id : et.name for et in self.config.events } 
-        meta['EventTypes']['*']= '- All -';
-        meta['TimeVars'] = { letter : time_letty_map[letter]['name'] for letter in time_letty_map} 
-        self.meta_json = json.dumps({ 'meta' : meta} )
-        self.json = {}
-        self.runs = []
-        event.global_config.update(self.dao.get_global_vars())
     
     def check(self):
         server_props = self.dao.get_server_properties()
@@ -50,62 +38,14 @@ class State:
             if status != ServerStatus.running:
                 server_props.update(_server_status = ServerStatus.running)
                 self.dao.set_server_properties(server_props)
-            for task in self.dao.get_tasks_to_run():
-                self.runs.append(Run(self,task))
-        self.runs = [run for run in self.runs if run.isRunning()]
-        if prepare_to_stop and len(self.runs)==0:
+        else:
             self.main_loop.stop()
             self.scheduler.stop()
             server_props.update(_server_status = ServerStatus.shutdown )
             self.dao.set_server_properties(server_props)
             return
-            
-        #retry failed tasks
-        for task in self.dao.get_tasks_of_status(event.TaskStatus.fail):
-            next_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=5 * task['run_count'])
-            task.update( _task_status = event.TaskStatus.retry, _run_at_dt = next_time )
-            self.dao.update_task(task)
-        #finish events
-        for ev in self.dao.get_events_to_be_completed():
-            ev.update( _event_status = event.EventStatus.success, _finished_dt = datetime.datetime.utcnow() )
-            self.dao.update_event(ev)
-        for gen_data in self.dao.load_active_generators():
-            gen = event.Generator(self.config,gen_data)
-            if event.GeneratorStatus.ontime == gen.status :
-                ne=gen.nextEvent()
-                if ne and ne.scheduled_dt < utils.utc_adjusted(hours=+12):
-                    self.dao.emit_event(ne) 
-        events,taskdict = self.dao.get_event_tasks()
-        json_data = json.dumps({ 'get_event_tasks' : events })
-        if json_data != self.json:
-            self.taskdict = taskdict
-            self.events = events
-            self.json = json_data
-            #log.debug( "sending:%s" %  self.json ) 
-            self.pushAll()
-    
+   
 
-    def change_tasks(self, apply_action, task_ids):
-        if apply_action not in ACTION_STATUS_MAP:
-            raise ValueError("apply_action:%r is not one of:%r" % (apply_action, ACTION_STATUS_MAP))
-        _, tasks = self.dao.get_event_tasks_by_taskid(task_ids)
-        selected_tasks = Set()
-        for task_id in task_ids:
-            selected_tasks.add(task_id)
-            if apply_action == 'RETRY_TREE':
-                for dependent_id in utils.flatten_links(tasks, task_id, 'dependents'):
-                    selected_tasks.add(dependent_id)
-        updated_tasks = {}
-        for task_id in selected_tasks:
-            task = tasks[task_id]
-            if apply_action in ['RETRY_TREE', 'RETRY', 'RUN_NOW']:
-                task.update(_run_at_dt=datetime.datetime.utcnow() + datetime.timedelta(seconds=5))
-            new_status = ACTION_STATUS_MAP[apply_action]
-            task.update(_task_status=new_status)
-            self.dao.update_task(task)
-            updated_tasks[task_id] = new_status.value
-        return updated_tasks
-    
     def get_file_fragment(self, fn, start=0,end=-1 ):
         if not(os.path.abspath(fn).startswith(self.dao.root)):
             raise ValueError('path:%s is outside of root:%s' % (fn,self.dao.root))
@@ -138,9 +78,6 @@ class State:
         if client in self.clients:
             self.clients.remove(client)
             
-    def emit_event(self,event_string):
-        self.dao.emit_event( event.Event.fromstring(self.config,event_string) )
-
 
 class IndexHandler(web.RequestHandler):
     def get(self):
@@ -226,12 +163,9 @@ def run_server(_dao,address="",port=9753):
     log.info( 'webpath=%s' % webpath)
     app = web.Application([
         (r'/', IndexHandler),
-        (r'/event.*', IndexHandler),
-        (r'/task/.*', IndexHandler),
-        (r'/run/.*', IndexHandler),
-        (r'/ws', SocketHandler),
-        (r'/api', ApiHandler),
-        (r"/(.*)", FileHandler,  {"path": webpath})
+        (r'/.ws', SocketHandler),
+        (r"/.web/(.*)", FileHandler,  {"path": webpath}),
+        (r"/(.*)", FileHandler,  {"path": _dao.root}),
     ])
     try:
         log.info( 'port=%r, address=%r' % (port,address) )
@@ -244,8 +178,6 @@ def run_server(_dao,address="",port=9753):
     server_props = _dao.get_server_properties()
     if ServerStatus.running == server_props['server_status'] :
         raise ValueError('server already running: %r' % server_props)
-    log.info('reseting %d tasks' % _dao.reset_running_tasks() )
-    
     server_props.update( _server_status = ServerStatus.running, 
                          _server_host = address, _server_port = port )
     _dao.set_server_properties(server_props)

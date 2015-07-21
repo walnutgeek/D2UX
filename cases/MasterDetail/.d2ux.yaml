@@ -2,41 +2,36 @@ root:
   sections:
     General:
       position: NEW_COLUMN
-	  fields:
-	    Name: 
-	      type: String
-	    Provider:
-	      type: Enum
-	      choices: [ AOL, Sonic.Net, "AT&T"]
+      fields:
+        Name: 
+          type: String
+        Provider:
+          type: Enum
+          choices: [ AOL, Sonic.Net, "AT&T"]
     Files:
       fields:
-	    Calendar:
-	      type: CSV_file
-	      fields:
-	      	Start:
-	      	  type: Timestamp
-	      	End:
-	      	  type: Timestamp
-	        Name:
-	          type: String
-	        Location:
-	          type: String   	
-	        Whole day:
-	          type: Boolean
-	        Priority:
-	          type: Double
-	          default_value: 3.0
-	          step: 0.1
+        Calendar:
+          type: CSV_file
+          fields:
+            Start:
+              type: Timestamp
+            End:
+              type: Timestamp
+            Name:
+              type: String
+            Location:
+              type: String       
+            Whole day:
+              type: Boolean
+            Priority:
+              type: Double
+              default_value: 3.0
+              step: 0.1
     Credentials:
       position: NEW_COLUMN
       fields:
-	    Email Address:
-	      type: String
-	      placeholder: "me@example.com"
-	    Password:
-	      type: Password
-	      
-	    
-        
-           	
-          
+        Email Address:
+          type: String
+          placeholder: "me@example.com"
+        Password:
+          type: Password

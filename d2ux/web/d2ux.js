@@ -166,26 +166,6 @@
     return '"'+v+'"';
   }
   
-  d2ux.all_values = function (){
-    var map = { commands: [], reports: [] };
-    d2ux.state.forEach(function(sec){
-      sec.forEach(function(opt){
-        if(opt.opt_key.startsWith('-')){
-          map[opt.opt_key] = opt.value(); 
-        }else if(opt.opt_key == 'OutputReportDesired'){
-          map.reports = opt.value().map(name2id);
-        }else{
-          var v = quote(opt.value())
-          if( v != '""' ){
-            map.commands.push({key: opt.opt_key, value: v }); 
-          }
-        }
-      })
-    });
-    map['-date'] = yesterday();
-    return map;
-  };
-
   d2ux.goto = function (msg,url){
     $('#modalMsg').text(msg);
     setTimeout(function(){
