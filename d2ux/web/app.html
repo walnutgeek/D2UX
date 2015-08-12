@@ -1,118 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>OnTimer</title>
-<link href="/css/bootstrap.css" rel="stylesheet">
-<link href="/app.css" rel="stylesheet">
-<script src="/slinck.js"></script>
-<script src="/js/jquery-1.11.1.min.js"></script>
-<script src="/js/jquery.history.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/js-yaml.min.js"></script>
-<script src="/app.js"></script>
+<title>D2UX</title>
+<link href="/.web/css/bootstrap.css" rel="stylesheet">
+<link href="/.web/app.css" rel="stylesheet">
+<script src="/.web/js/jquery-1.11.1.min.js"></script>
+<script src="/.web/js/jquery.history.js"></script>
+<script src="/.web/js/bootstrap.min.js"></script>
+<script src="/.web/js/js-yaml.min.js"></script>
+<script src="/.web/app.js"></script>
+<script src="/.web/d2ux.js"></script>
 </head>
 <body>
+		<nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+		<a class="navbar-brand" href="#"><span class="label label-default">D<span style="font-size: 90%;vertical-align: top;">2</span>UX</span></a>
+       
+        <ul class="nav navbar-nav navbar-left">
+          <ul class="breadcrumb list-inline">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Library</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello George <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+              <li><a href="#">Settings</a></li>
+              <li><a href="#">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </ul>
+        <form class="nav navbar-form navbar-right" role="search">
+        <div class="form-group" style="width: 300px;">
+            <div class="input-group ">
+                <input type="text" class="form-control" placeholder="Search for..."  />
+      <span class="input-group-btn">
+          <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true" /></button>
+      </span>
+    </div>
+            
+  </div>
+</form>
+          
+      </div>
+    </nav>
 	<div class="container" id="page">
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="container-fluid">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#"><span
-						class="label label-default" id="message">On</span><span
-						class="label label-primary">Timer</span></a>
-
-				</div>
-
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav" id="crumbs" >
-						<li class="active" id="query_li"><a class="history_nav" href="#">Query</a></li>
-						<li id="type_li"><a class="history_nav" href="#">?</a></li>
-						<li id="event_li"><a class="history_nav" href="#">?</a></li>
-						<li id="task_li"><a class="history_nav" href="#">?</a></li>
-						<li class="dropdown" id="run_li">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
-			 					<span class="last-selected">?</span> <span class="caret"></span>
-						  	</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">?</a></li>
-								<li><a href="#">??</a></li>
-							</ul>
-						</li>
-					</ul>
-
-					<ul class="nav navbar-nav" id="query_dropdowns"">
-						<li class="active" id="query_li"><a class="history_nav" href="#">Query</a></li>
-						<li class="dropdown" id="interval-type">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
-			 					<span class="last-selected">?</span> <span class="caret"></span>
-						  	</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">?</a></li>
-								<li><a href="#">??</a></li>
-							</ul>
-						</li>
-						<li class="dropdown" id="interval-time">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
-			 					<span class="last-selected">?</span> <span class="caret"></span>
-						  	</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">?</a></li>
-								<li><a href="#">??</a></li>
-							</ul>
-						</li>
-						<li class="dropdown" id='event-type'>
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
-			 					<span class="last-selected">?</span> <span class="caret"></span>
-						  	</a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">?</a></li>
-								<li><a href="#">??</a></li>
-							</ul>
-						</li>
-					</ul>
-
-					<form class="navbar-form navbar-right" role="search">
-						<div class="form-group">
-							<input type="text" class="form-control" id='search'
-								placeholder="Search">
-						</div>
-						<button type="submit" class="btn btn-default" id='submit'>Submit</button>
-					</form>
-				</div>
-				<!-- /.navbar-collapse -->
-			</div>
-			<!-- /.container-fluid -->
-		</nav>
-
 		<div class="row">
-			<div class="col-md-9" role="main" id="data_container">
+			<div class="col-md-8" 
+			     role="main" 
+			     id="main_area">
+			   main
 			</div>
-			<div class="col-md-3">
-				<div id="sidebar" class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix"
-					role="complementary">
-					????
+			<div class="col-md-2">
+				<div id="sidebar" 
+				     class="hidden-print hidden-xs hidden-sm affix"
+					 role="complementary">
+				sidebar
 				</div>
 			</div>
 		</div>
-	<footer id="actions" class="navbar  navbar-default navbar-fixed-bottom"
-		role="navigation">
-		<div class="container-fluid">
-			<form class="navbar-form navbar-right">
-				<button type="submit" class="btn disabled" id='skip_task'>?</button>
-				<button type="submit" class="btn" id='skip_task'>?</button>
-			</form>
-		</div>
-		<!-- /.navbar-collapse -->
-		</div>
-		<!-- /.container-fluid -->
-	</footer>
 	</div>
 </body>
 </html>
