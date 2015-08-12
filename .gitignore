@@ -52,9 +52,6 @@ coverage.xml
 docs/_build/
 
 /.settings
-/.README.md.html
-/.MinimalViableProduct.md.html
-/.OnExp.md.html
-/.ToDo.md.html
 /test-out
 /root
+/.*.md.html
