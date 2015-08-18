@@ -1,11 +1,13 @@
 import os
-from sniffer.api import file_validator,runnable
+from sniffer.api import file_validator,runnable,select_runnable
 
-@file_validator('execute_nose')
+@select_runnable('execute_nose')
+@file_validator
 def py_files(filename):
     return filename.endswith('.py') or filename.endswith('.yaml') or filename.endswith('.rst')
 
-@file_validator('execute_mocha')
+@select_runnable('execute_mocha')
+@file_validator
 def js_files(filename):
     return filename.endswith('.js') or filename.endswith('.yaml') or filename.endswith('.json')
 

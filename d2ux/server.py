@@ -28,6 +28,7 @@ log = logging.getLogger(__name__)
 class State:
     def __init__(self, dao):
         self.dao = dao
+        self.clients = []
     
     def check(self):
         server_props = self.dao.get_server_properties()
@@ -71,8 +72,8 @@ class State:
     def addClient(self,client):
         if client not in self.clients:
             self.clients.append(client)
-            self.pushToOne(client, self.meta_json)
-            self.pushToOne(client, self.json)
+            #self.pushToOne(client, self.meta_json)
+            #self.pushToOne(client, self.json)
 
     def removeClient(self,client):
         if client in self.clients:
@@ -86,7 +87,8 @@ class IndexHandler(web.RequestHandler):
 class SocketHandler(websocket.WebSocketHandler):
     
     def __init__(self,*args,**kwargs):
-        self.user = None
+        self.path = None
+        self.state = None
         websocket.WebSocketHandler.__init__(self,*args,**kwargs)
         
     def open(self):

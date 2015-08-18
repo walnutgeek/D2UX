@@ -481,50 +481,61 @@ $(function() {
     return refresh;
   }
 
-  /* function connect(){
-    var $container = $('#debug');
-    var $message = $('#message');
-    var ws = new WebSocket('ws://'+location.host+'/ws');
+  function connect(){
+    var banner = $('#banner');
+    var ws = new WebSocket('ws://'+location.host+'/.ws');
     ws.onopen = function() {
-      $message.text("On");
-      $message.attr("class", 'label label-info');
+    	banner.attr("class", 'label label-info');
     };
     
     ws.onmessage = function(ev) {
-      $message.attr("class", 'label label-success');
-      $message.text("On");
-      $message.fadeIn("slow");
+	  banner.attr("class", 'label label-success');
+	  banner.fadeIn("slow");
       setTimeout(function() {
-        $message.attr("class", 'label label-info');
+    	banner.attr("class", 'label label-info');
       }, 1000)
   
-      var json = JSON.parse(ev.data)
-      if ( process_content(json) ){
-        rr().refresh(globals.get_event_tasks);
-      }
+      var json = JSON.parse(ev.data);
+      console.log(json);
     };
     
     ws.onclose = function(ev) {
-      $message.text("Off");
-      $message.attr("class", 'label label-danger');
+      banner.attr("class", 'label label-danger');
       ws.dead=true;
     };
     ws.onerror = function(ev) {
-      $message.attr("class", 'label label-warning');
+      banner.attr("class", 'label label-warning');
     };
     ws.dead=false;
     return ws;
   }
   var ws = connect(); 
+  console.log(ws.dead);
   
   setInterval(function() {
     if( ws.dead ){
       ws = connect();
-    }else if ( globals.data_is_ready() && currScreen == 'events' ){
-      rr().refresh(globals.get_event_tasks);
-      
+//    }else if ( globals.data_is_ready() && currScreen == 'events' ){
+//      rr().refresh(globals.get_event_tasks);
+//      
     }
-  }, 1000 * 30);*/
+  }, 1000 * 30);
   
   History.pushState({urlPath: window.location.pathname, time: new Date()}, $("title").text(), location.url);
+
+  function go_to_url(msg,url){
+    $('#modalMsg').text(msg);
+    setTimeout(function(){
+      window.location = url; 
+    }, 2000);
+  }
+
+  function modal_on(show){
+    $('#waitModal').modal({backdrop:'static', keyboard:false, show: show});
+  }
+	  
+  $.ajax({url: '/.d2ux.yaml',dataType: 'text', success:function(d){
+      var doc = jsyaml.load(d);
+      console.log(doc);
+  }});  
 });
